@@ -8,31 +8,31 @@ serviceRouter.get('/', (request, response) => {
 const listofService = [
     {
         'id': 1,
-        'name': 'apple',
+        'name': 'WebDevelopment',
     },
     {
         'id': 2,
-        'name': 'mango'
+        'name': 'Mobile APP Development'
     },
     {
         'id': 3,
-        'name': 'orange'
+        'name': 'Game Programming'
     },
     {
         'id': 4,
-        'name': 'grape'
+        'name': 'Data Analysis'
     }
 ]
-serviceRouter.get('/:id([0-9]{1})', (request, response) => {
-    const pageId = Number(request.params.id)
-    const userId = listofService.find((user) => user.id === pageId)
+serviceRouter.get('/', (request, response) => {
+    response.send(`This is the list of users`)
+})
 
-    if (!userId) {
-        response.send(`Page not found`)
-    }
-    else {
-        response.send(userId.name)
-    }
-    response.send(`This is list of service ${request.params.id}`)
+serviceRouter.get('/:id([0-9]{1})',(request,response)=>{
+    response.send(request.user.name)
+})
+
+serviceRouter.param('id',(request,response,next,id)=>{
+    request.user = listofService[id]
+    next()
 })
 module.exports = serviceRouter
