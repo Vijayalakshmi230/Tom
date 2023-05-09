@@ -1,38 +1,48 @@
-const express = require('express')
-const serviceRouter = express.Router()
+const express=require('express')
+const router=express.Router()
 
-serviceRouter.get('/', (request, response) => {
-    response.send("Service")
-})
-
-const listofService = [
-    {
-        'id': 1,
-        'name': 'WebDevelopment',
-    },
-    {
-        'id': 2,
-        'name': 'Mobile APP Development'
-    },
-    {
-        'id': 3,
-        'name': 'Game Programming'
-    },
-    {
-        'id': 4,
-        'name': 'Data Analysis'
-    }
+const users=[{
+ 
+    name:'web'
+  },
+  {
+    
+    name:'DataScience'
+  },
+  {
+    
+    name:'ML engineer'
+  },
+  {
+   
+    name:'Ai engineer'
+  }
 ]
-serviceRouter.get('/', (request, response) => {
-    response.send(`This is the list of users`)
+
+router.get('/',(req,res)=>{
+  res.send("User Page")
+})
+router.get('/new',(req,res)=>{
+  res.render('service/new')
 })
 
-serviceRouter.get('/:id([0-9]{1})',(request,response)=>{
-    response.send(request.user.name)
+router.post('/',(req,res)=>{
+  //console.log(request.body.FirstName)
+  users.push({name:request.body.FirstName})
+  res.redirect(`/service/${users.length}`)
 })
 
-serviceRouter.param('id',(request,response,next,id)=>{
-    request.user = listofService[id]
-    next()
+
+router.get('/:id([0-9])',(req,res)=>{
+res.send(`${req.user.name} with id ${req.params.id}`)
+
+ 
 })
-module.exports = serviceRouter
+
+
+router.param('id',(req,res,next,id)=>{
+  req.user=users[id]
+  next();
+})
+// const UsersArrayLength=users.length;
+module.exports=router;

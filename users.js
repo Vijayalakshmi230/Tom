@@ -23,18 +23,31 @@ const listofUsers = [
         'name': 'sujatha',
     }
 ]
-userRouter.get('/:id([0-9]{1})', (request, response) => {
-    const pageId = Number(request.params.id)
-    const userId = listofUsers.find((user)=>user.id === pageId)
-    
-    if(!userId)
-    {
-        response.send(`Page not found`)
-    }
-    else{
-        response.json(userId.name)
-    }
-    response.send(`This is lis of users ${request.params.id}`)
+
+
+userRouter.get('/new',(request,response)=>{
+    response.render('users/new')
+})
+userRouter.post('/',(request,response)=>{
+   // console.log(request.body.FirstName)
+   listofUsers.push({name:request.body.FirstName})
+   response.redirect(`/users/${listofUsers.length}`)
+})
+
+userRouter.get('/:id([0-9]{1})',(request,response)=>{
+    console.log(request.user);
+    response.send(`${request.user.name} with id ${request.params.id}`)
+})
+
+
+userRouter.param('id',(request,response,next,id)=>{
+   request.user = listofUsers[id-1]
+   next()
+})
+
+
+userRouter.get(',/html',(request,response)=>{
+    response.render('contact')
 })
 
 module.exports = userRouter
